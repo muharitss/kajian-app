@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DynamicMeta } from '@/shared/components/common/DynamicMeta';
 import { authApi } from '@/features/auth/api/auth.api';
 import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -39,6 +40,7 @@ export const AdminLoginPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/40 p-4">
+      <DynamicMeta title="Admin Login" noIndex={true} />
       <Card className="w-full max-w-md shadow-lg border">
         <CardHeader className="space-y-1 text-center">
           <div className="mx-auto p-3 rounded-full bg-primary/10 text-primary w-fit mb-2">

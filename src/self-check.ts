@@ -80,6 +80,12 @@ async function runFrontendSelfCheck() {
     assert.strictEqual(typeof RichTextEditor, 'function', 'RichTextEditor should be a functional component');
     console.log('     ✓ RichTextEditor Export PASSED');
 
+    // 6. Check DynamicMeta Component
+    console.log('  6. Testing DynamicMeta Export...');
+    const { DynamicMeta } = await import('./shared/components/common/DynamicMeta.js');
+    assert.strictEqual(typeof DynamicMeta, 'function', 'DynamicMeta should be a functional component');
+    console.log('     ✓ DynamicMeta Component Export PASSED');
+
     console.log('\n🎉 ALL FRONTEND SELF-CHECKS PASSED SUCCESSFULLY!');
   } catch (error) {
     console.error('\n❌ Self-Check Failed:', error);

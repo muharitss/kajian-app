@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useParams, useLocation, Link } from 'react-router-dom';
+import { DynamicMeta } from '@/shared/components/common/DynamicMeta';
 import { PublicNavbar } from '@/shared/components/layout/PublicNavbar';
 import { PublicFooter } from '@/shared/components/layout/PublicFooter';
 import { usePublicArticles } from '@/features/articles/hooks/useArticles';
@@ -146,6 +147,10 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <DynamicMeta
+        title="Portal Kajian Islam"
+        description="Baca artikel dan materi kajian Islam dari berbagai ulama terpercaya. Topik: Hukum Islam, Aqidah, Hadits, Sirah, Khutbah, dan lainnya."
+      />
       <PublicNavbar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
       <main className="flex-1 container mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6 max-w-6xl">

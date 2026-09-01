@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useArticleDetail } from "@/features/articles/hooks/useArticles";
 import { RelatedArticles } from "@/features/articles/components/RelatedArticles";
+import { DynamicMeta } from "@/shared/components/common/DynamicMeta";
 import { PublicNavbar } from "@/shared/components/layout/PublicNavbar";
 import { PublicFooter } from "@/shared/components/layout/PublicFooter";
 import { Badge } from "@/components/ui/badge";
@@ -100,7 +101,17 @@ export const ArticleDetailPage: React.FC = () => {
 
         {/* Article View */}
         {!isLoading && article && (
-          <article className="space-y-4 sm:space-y-6">
+          <>
+            <DynamicMeta
+              title={article.title}
+              description={
+                article.excerpt ||
+                (article.content ? article.content.replace(/<[^>]*>?/gm, '').substring(0, 155) + '...' : undefined)
+              }
+              image={article.coverImage}
+              type="article"
+            />
+            <article className="space-y-4 sm:space-y-6">
             {/* Header Metadata */}
             <div className="space-y-2 sm:space-y-3 border-b pb-4 sm:pb-6">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
@@ -173,6 +184,7 @@ export const ArticleDetailPage: React.FC = () => {
               </div>
             )}
           </article>
+        </>
         )}
 
         {/* Related Articles Section */}
