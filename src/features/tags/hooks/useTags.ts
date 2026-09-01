@@ -19,6 +19,13 @@ export const useTagMutations = () => {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) => tagApi.update(id, name),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tags'] });
+    },
+  });
+
   const deleteMutation = useMutation({
     mutationFn: tagApi.delete,
     onSuccess: () => {
@@ -26,5 +33,5 @@ export const useTagMutations = () => {
     },
   });
 
-  return { createMutation, deleteMutation };
+  return { createMutation, updateMutation, deleteMutation };
 };

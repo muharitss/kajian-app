@@ -86,6 +86,12 @@ async function runFrontendSelfCheck() {
     assert.strictEqual(typeof DynamicMeta, 'function', 'DynamicMeta should be a functional component');
     console.log('     ✓ DynamicMeta Component Export PASSED');
 
+    // 7. Check AdminTaxonomyPage Component
+    console.log('  7. Testing AdminTaxonomyPage Export...');
+    const { AdminTaxonomyPage } = await import('./pages/admin/AdminTaxonomyPage.js');
+    assert.strictEqual(typeof AdminTaxonomyPage, 'function', 'AdminTaxonomyPage should be a functional component');
+    console.log('     ✓ AdminTaxonomyPage Component Export PASSED');
+
     console.log('\n🎉 ALL FRONTEND SELF-CHECKS PASSED SUCCESSFULLY!');
   } catch (error) {
     console.error('\n❌ Self-Check Failed:', error);

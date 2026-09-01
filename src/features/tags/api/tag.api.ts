@@ -19,6 +19,11 @@ export const tagApi = {
     return res.data.data;
   },
 
+  update: async (id: string, name: string): Promise<Tag> => {
+    const res = await api.put<ApiResponse<Tag>>(`/tags/${id}`, { name });
+    return res.data.data;
+  },
+
   delete: async (id: string): Promise<void> => {
     await api.delete(`/tags/${id}`);
   },
