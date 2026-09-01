@@ -3,23 +3,42 @@ import { Link } from 'react-router-dom';
 import { useAdminArticles, useArticleMutations } from '@/features/articles/hooks/useArticles';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Plus, Edit3, Trash2, Eye, Search, AlertCircle } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Plus, Edit3, Trash2, Eye, Search, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
 
 export const AdminArticleListPage: React.FC = () => {
   const [search, setSearch] = useState('');
-  const { data: articlesData, isLoading, isError } = useAdminArticles({ search: search || undefined });
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  const { data: articlesData, isLoading, isError } = useAdminArticles({
+    search: search || undefined,
+    page,
+    limit,
+  });
+
   const { deleteMutation } = useArticleMutations();
 
   const articles = articlesData?.data || [];
+  const meta = articlesData?.meta;
+  const totalPages = meta?.totalPages || 1;
+  const totalItems = meta?.total || 0;
 
   const handleDelete = (id: string, title: string) => {
     if (window.confirm(`Apakah Anda yakin ingin menghapus artikel "${title}"?`)) {
       deleteMutation.mutate(id);
     }
   };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setPage(1);
+  };
+
+  const startItem = totalItems === 0 ? 0 : (page - 1) * limit + 1;
+  const endItem = Math.min(page * limit, totalItems);
 
   return (
     <div className="space-y-6">
@@ -45,12 +64,12 @@ export const AdminArticleListPage: React.FC = () => {
             type="text"
             placeholder="Cari berdasarkan judul..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleSearchChange}
             className="w-full h-9 pl-9 pr-3 text-sm rounded-md border bg-background focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
         <span className="text-xs text-muted-foreground hidden sm:inline">
-          Total {articles.length} artikel
+          Total {totalItems} artikel
         </span>
       </div>
 
@@ -73,6 +92,7 @@ export const AdminArticleListPage: React.FC = () => {
               <thead className="bg-muted/50 border-b font-semibold text-muted-foreground">
                 <tr>
                   <th className="p-3">Judul Artikel</th>
+                  <th className="p-3">Kategori</th>
                   <th className="p-3">Tag</th>
                   <th className="p-3">Pemateri</th>
                   <th className="p-3">Status</th>
@@ -86,6 +106,15 @@ export const AdminArticleListPage: React.FC = () => {
                   <tr key={article.id} className="hover:bg-muted/20 transition-colors">
                     <td className="p-3 font-medium text-foreground max-w-xs truncate">
                       {article.title}
+                    </td>
+                    <td className="p-3">
+                      {article.category ? (
+                        <Badge variant="secondary" className="text-[10px] py-0 px-1 font-medium">
+                          {article.category.name}
+                        </Badge>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
                     </td>
                     <td className="p-3">
                       <div className="flex flex-wrap gap-1">
@@ -137,7 +166,59 @@ export const AdminArticleListPage: React.FC = () => {
             </table>
           )}
         </CardContent>
+
+        {/* Pagination Footer */}
+        {!isLoading && !isError && totalItems > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t text-xs text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <span>
+                Menampilkan {startItem}-{endItem} dari {totalItems} artikel
+              </span>
+              <select
+                value={limit}
+                onChange={(e) => {
+                  setLimit(Number(e.target.value));
+                  setPage(1);
+                }}
+                className="h-8 rounded border bg-background px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+              >
+                <option value={10}>10 per halaman</option>
+                <option value={20}>20 per halaman</option>
+                <option value={50}>50 per halaman</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page <= 1}
+                onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                className="h-8 text-xs"
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Sebelumnya
+              </Button>
+
+              <span className="px-2 font-medium text-foreground">
+                Halaman {page} dari {totalPages}
+              </span>
+
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page >= totalPages}
+                onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+                className="h-8 text-xs"
+              >
+                Selanjutnya
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          </div>
+        )}
       </Card>
     </div>
   );
 };
+

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useSearchParams, useParams, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, useParams, useLocation, Link } from 'react-router-dom';
 import { PublicNavbar } from '@/shared/components/layout/PublicNavbar';
 import { PublicFooter } from '@/shared/components/layout/PublicFooter';
 import { usePublicArticles } from '@/features/articles/hooks/useArticles';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { ArticleCard } from '@/features/articles/components/ArticleCard';
+import { ArticleCarousel } from '@/features/articles/components/ArticleCarousel';
 import { ArticleSkeleton } from '@/features/articles/components/ArticleSkeleton';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -46,6 +47,19 @@ export interface CategoryNavInfo {
   title: string;
 }
 
+const SLUG_LABEL_MAP: Record<string, { parent?: string; current: string; title: string }> = {
+  'sirah-sejarah': { parent: 'Sejarah Islam', current: 'Sirah & Sejarah', title: 'SIRAH & SEJARAH ISLAM' },
+  'hadits-sunnah': { parent: "Al-Qur'an & Hadits", current: 'Hadits & Sunnah', title: 'HADITS & SUNNAH' },
+  'tafsir-al-quran': { parent: "Al-Qur'an & Hadits", current: "Tafsir Al-Qur'an", title: "TAFSIR AL-QUR'AN" },
+  'qolbu': { parent: 'Belajar Islam', current: 'Manajemen Qolbu', title: 'MANAJEMEN QOLBU' },
+  'jalan-kebenaran': { parent: 'Belajar Islam', current: 'Jalan Kebenaran', title: 'JALAN KEBENARAN' },
+  'haji-umrah': { parent: 'Hukum Islam', current: 'Haji & Umrah', title: 'HAJI & UMRAH' },
+  'khutbah': { parent: undefined, current: 'Naskah Khutbah', title: 'NASKAH KHUTBAH' },
+  'khutbah-jumat': { parent: 'Naskah Khutbah', current: 'Khutbah Jumat', title: 'KHUTBAH JUMAT' },
+  'khutbah-id': { parent: 'Naskah Khutbah', current: 'Khutbah Idul Fitri & Adha', title: 'KHUTBAH IDUL FITRI & ADHA' },
+  'ceramah-ringkas': { parent: 'Naskah Khutbah', current: 'Ceramah Ringkas', title: 'CERAMAH RINGKAS' },
+};
+
 export function getCategoryNavInfo(
   category?: string,
   tag?: string,
@@ -56,6 +70,9 @@ export function getCategoryNavInfo(
   if (activeTag) {
     if (activeTag === 'Naskah Khutbah' || activeTag === 'Khutbah' || activeTag === 'khutbah') {
       return { current: 'Naskah Khutbah', title: 'NASKAH KHUTBAH' };
+    }
+    if (SLUG_LABEL_MAP[activeTag]) {
+      return SLUG_LABEL_MAP[activeTag];
     }
     if (HUKUM_ISLAM_SET.has(activeTag)) {
       return { parent: 'Hukum Islam', current: activeTag, title: activeTag.toUpperCase() };
@@ -80,11 +97,17 @@ export function getCategoryNavInfo(
 export const HomePage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const routeParams = useParams<{ tagSlug?: string }>();
+  const location = useLocation();
 
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const debouncedSearch = useDebounce(searchQuery, 300);
 
-  const selectedCategory = searchParams.get('category') || undefined;
+  useEffect(() => {
+    setSearchQuery(searchParams.get('search') || '');
+  }, [searchParams]);
+
+  const isKhutbahRoute = location.pathname.startsWith('/khutbah');
+  const selectedCategory = searchParams.get('category') || (isKhutbahRoute && !routeParams.tagSlug ? 'khutbah' : undefined);
   const selectedTag = routeParams.tagSlug || searchParams.get('tag') || undefined;
   const selectedUstadz = searchParams.get('ustadz') || undefined;
   const page = Number(searchParams.get('page')) || 1;
@@ -96,7 +119,7 @@ export const HomePage: React.FC = () => {
     tag: selectedTag,
     ustadz: selectedUstadz,
     page,
-    limit: 9,
+    limit: 10,
   });
 
   const handleUpdateParam = (key: string, value?: string) => {
@@ -106,7 +129,9 @@ export const HomePage: React.FC = () => {
     } else {
       nextParams.delete(key);
     }
-    nextParams.set('page', '1');
+    if (key !== 'page') {
+      nextParams.set('page', '1');
+    }
     setSearchParams(nextParams);
   };
 
@@ -126,6 +151,13 @@ export const HomePage: React.FC = () => {
       <main className="flex-1 container mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6 max-w-6xl">
         {/* Main Article Section */}
         <section className="space-y-4 sm:space-y-6">
+          {/* Latest Articles Hero Carousel */}
+          {!isLoading && !isError && articles.length > 0 && !debouncedSearch && page === 1 && (
+            <div className="mb-4 sm:mb-6">
+              <ArticleCarousel articles={articles.slice(0, 10)} />
+            </div>
+          )}
+
           {/* Category Breadcrumb Navigation */}
           <div className="space-y-2">
             <Breadcrumb>

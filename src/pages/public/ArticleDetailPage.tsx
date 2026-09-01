@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useArticleDetail } from "@/features/articles/hooks/useArticles";
+import { RelatedArticles } from "@/features/articles/components/RelatedArticles";
 import { PublicNavbar } from "@/shared/components/layout/PublicNavbar";
 import { PublicFooter } from "@/shared/components/layout/PublicFooter";
 import { Badge } from "@/components/ui/badge";
@@ -168,6 +169,11 @@ export const ArticleDetailPage: React.FC = () => {
               </div>
             )}
           </article>
+        )}
+
+        {/* Related Articles Section */}
+        {!isLoading && article && (
+          <RelatedArticles currentSlug={slug || ""} />
         )}
       </main>
 

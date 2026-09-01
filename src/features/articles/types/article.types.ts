@@ -6,6 +6,16 @@ export interface TagItem {
   slug: string;
 }
 
+export interface CategoryItem {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+  parentId?: string | null;
+  parent?: CategoryItem | null;
+  children?: CategoryItem[];
+}
+
 export interface UstadzItem {
   id: string;
   name: string;
@@ -26,6 +36,8 @@ export interface Article {
   createdAt: string;
   updatedAt: string;
   ustadz?: UstadzItem;
+  categoryId?: string | null;
+  category?: CategoryItem | null;
   tags: TagItem[];
 }
 
@@ -45,6 +57,7 @@ export interface CreateArticlePayload {
   coverImage?: string;
   status?: ArticleStatus;
   ustadzId?: string;
+  categoryId?: string;
   tagIds?: string[];
 }
 
@@ -55,5 +68,6 @@ export interface UpdateArticlePayload {
   coverImage?: string;
   status?: ArticleStatus;
   ustadzId?: string | null;
+  categoryId?: string | null;
   tagIds?: string[];
 }

@@ -25,6 +25,15 @@ export const useArticleDetail = (slug: string) => {
   });
 };
 
+export const useRelatedArticles = (slug: string, limit: number = 3) => {
+  return useQuery({
+    queryKey: ['related-articles', slug, limit],
+    queryFn: () => articleApi.getRelatedArticles(slug, limit),
+    enabled: Boolean(slug),
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
 export const useArticleMutations = () => {
   const queryClient = useQueryClient();
 

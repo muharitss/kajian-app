@@ -21,6 +21,10 @@ export const AppRouter: React.FC = () => {
         <Route path="/hukum-islam/:tagSlug" element={<HomePage />} />
         <Route path="/belajar-islam" element={<HomePage />} />
         <Route path="/belajar-islam/:tagSlug" element={<HomePage />} />
+        <Route path="/khutbah" element={<HomePage />} />
+        <Route path="/khutbah/:tagSlug" element={<HomePage />} />
+        <Route path="/kategori/:tagSlug" element={<HomePage />} />
+        <Route path="/topik/:tagSlug" element={<HomePage />} />
         <Route path="/article/:slug" element={<ArticleDetailPage />} />
 
         {/* Hidden Admin Entrance Login Route */}

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Home,
   Sun,
@@ -8,15 +8,15 @@ import {
   ExternalLink,
   Search,
   Lock,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from '@/components/ui/accordion';
+} from "@/components/ui/accordion";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -24,24 +24,24 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuGroup,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuTrigger,
   NavigationMenuContent,
-} from '@/components/ui/navigation-menu';
+} from "@/components/ui/navigation-menu";
 import {
   Sheet,
   SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet';
+} from "@/components/ui/sheet";
 
-import { useTags } from '@/features/tags/hooks/useTags';
-import { useUstadz } from '@/features/ustadz/hooks/useUstadz';
+import { useTags } from "@/features/tags/hooks/useTags";
+import { useUstadz } from "@/features/ustadz/hooks/useUstadz";
 
 interface PublicNavbarProps {
   searchQuery?: string;
@@ -51,91 +51,120 @@ interface PublicNavbarProps {
 // Sub-menu Specification & Fallback Exports for Self-Check Tests
 // Hardcoded Menu Specifications for Tag-Based Navigation
 export const HUKUM_ISLAM_MENU = [
-  { name: 'Thoharoh', href: '/hukum-islam/thoharoh', tagSlug: 'thoharoh' },
-  { name: 'Shalat', href: '/hukum-islam/shalat', tagSlug: 'shalat' },
-  { name: 'Puasa', href: '/hukum-islam/puasa', tagSlug: 'puasa' },
-  { name: 'Muamalah', href: '/hukum-islam/muamalah', tagSlug: 'muamalah' },
-  { name: 'Haji Umrah', href: '/hukum-islam/haji-umrah', tagSlug: 'haji-umrah' },
-  { name: 'Waris', href: '/hukum-islam/waris', tagSlug: 'waris' },
-  { name: 'Umum', href: '/hukum-islam/umum', tagSlug: 'umum' },
+  { name: "Thoharoh", href: "/hukum-islam/thoharoh", tagSlug: "thoharoh" },
+  { name: "Shalat", href: "/hukum-islam/shalat", tagSlug: "shalat" },
+  { name: "Puasa", href: "/hukum-islam/puasa", tagSlug: "puasa" },
+  { name: "Muamalah", href: "/hukum-islam/muamalah", tagSlug: "muamalah" },
+  {
+    name: "Haji Umrah",
+    href: "/hukum-islam/haji-umrah",
+    tagSlug: "haji-umrah",
+  },
+  { name: "Waris", href: "/hukum-islam/waris", tagSlug: "waris" },
+  { name: "Umum", href: "/hukum-islam/umum", tagSlug: "umum" },
 ];
 
 export const BELAJAR_ISLAM_MENU = [
-  { name: 'Aqidah', href: '/belajar-islam/aqidah', tagSlug: 'aqidah' },
-  { name: 'Akhlaq', href: '/belajar-islam/akhlaq', tagSlug: 'akhlaq' },
-  { name: 'Amalan', href: '/belajar-islam/amalan', tagSlug: 'amalan' },
-  { name: 'Keluarga', href: '/belajar-islam/keluarga', tagSlug: 'keluarga' },
-  { name: 'Muslimah', href: '/belajar-islam/muslimah', tagSlug: 'muslimah' },
-  { name: "Tafsir Al-Qur'an", href: '/belajar-islam/tafsir-al-quran', tagSlug: 'tafsir-al-quran' },
-  { name: 'Teladan', href: '/belajar-islam/teladan', tagSlug: 'teladan' },
-  { name: 'Jalan Kebenaran', href: '/belajar-islam/jalan-kebenaran', tagSlug: 'jalan-kebenaran' },
-  { name: 'Manajemen Qolbu', href: '/belajar-islam/qolbu', tagSlug: 'qolbu' },
+  {
+    name: "Sirah & Sejarah",
+    href: "/belajar-islam/sirah-sejarah",
+    tagSlug: "sirah-sejarah",
+  },
+  {
+    name: "Hadits & Sunnah",
+    href: "/belajar-islam/hadits-sunnah",
+    tagSlug: "hadits-sunnah",
+  },
+  { name: "Aqidah", href: "/belajar-islam/aqidah", tagSlug: "aqidah" },
+  { name: "Akhlaq", href: "/belajar-islam/akhlaq", tagSlug: "akhlaq" },
+  { name: "Amalan", href: "/belajar-islam/amalan", tagSlug: "amalan" },
+  { name: "Keluarga", href: "/belajar-islam/keluarga", tagSlug: "keluarga" },
+  { name: "Muslimah", href: "/belajar-islam/muslimah", tagSlug: "muslimah" },
+  {
+    name: "Tafsir Al-Qur'an",
+    href: "/belajar-islam/tafsir-al-quran",
+    tagSlug: "tafsir-al-quran",
+  },
+  { name: "Teladan", href: "/belajar-islam/teladan", tagSlug: "teladan" },
+  {
+    name: "Jalan Kebenaran",
+    href: "/belajar-islam/jalan-kebenaran",
+    tagSlug: "jalan-kebenaran",
+  },
+  { name: "Manajemen Qolbu", href: "/belajar-islam/qolbu", tagSlug: "qolbu" },
 ];
 
 export const BELAJAR_ISLAM_SUBMENUS = [
   {
-    title: 'Hukum Islam',
-    headerHref: '/hukum-islam',
+    title: "Hukum Islam",
+    headerHref: "/hukum-islam",
     items: HUKUM_ISLAM_MENU.map((i) => i.name),
   },
   {
-    title: 'Belajar Islam',
-    headerHref: '/belajar-islam',
+    title: "Belajar Islam",
+    headerHref: "/belajar-islam",
     items: BELAJAR_ISLAM_MENU.map((i) => i.name),
   },
 ];
 
 export const KHUTBAH_CATEGORIES = [
   {
-    id: 'kategori',
-    label: 'Kategori Kajian',
-    sampleTitles: ['Aqidah', 'Fiqih', 'Akhlaq', 'Muamalah', 'Tafsir'],
+    id: "kategori",
+    label: "Kategori Kajian",
+    sampleTitles: ["Aqidah", "Fiqih", "Akhlaq", "Sirah", "Hadits"],
   },
   {
-    id: 'ustadz',
-    label: 'Pemateri / Ustadz',
-    sampleTitles: ['Ustadz Dr. Firanda Andirja', 'Ustadz Abduh Tuasikal', 'Ustadz Khalid Basalamah'],
+    id: "ustadz",
+    label: "Pemateri / Ustadz",
+    sampleTitles: [
+      "Ustadz Dr. Firanda Andirja",
+      "Ustadz Abduh Tuasikal",
+      "Ustadz Khalid Basalamah",
+    ],
   },
   {
-    id: 'tag',
-    label: 'Tag Populer',
-    sampleTitles: ['Shalat', 'Puasa', 'Ramadhan', 'Adab'],
+    id: "tag",
+    label: "Tag Populer",
+    sampleTitles: ["Sirah", "Hadits", "Shalat", "Puasa", "Ramadhan"],
   },
   {
-    id: 'khutbah',
-    label: 'Naskah Khutbah',
-    sampleTitles: ['Khutbah Jumat', 'Khutbah Idul Fitri', 'Khutbah Idul Adha'],
+    id: "khutbah",
+    label: "Naskah Khutbah",
+    sampleTitles: ["Khutbah Jumat", "Khutbah Idul Fitri", "Khutbah Idul Adha"],
   },
 ];
 
 export const EXTERNAL_LINKS = [
-  { label: 'Semua Kajian', href: '/' },
-  { label: 'Arsip Khutbah', href: '/?search=khutbah' },
-  { label: 'Daftar Ustadz', href: '/?search=ustadz' },
-  { label: 'Tazkiyatun Nufus', href: '/hukum-islam/akhlaq' },
-  { label: 'E-Book & Faida', href: '/hukum-islam/umum' },
+  { label: "Semua Kajian", href: "/" },
+  { label: "Sirah & Sejarah", href: "/belajar-islam/sirah-sejarah" },
+  { label: "Hadits & Sunnah", href: "/belajar-islam/hadits-sunnah" },
+  { label: "Arsip Khutbah", href: "/khutbah" },
+  { label: "Daftar Ustadz", href: "/?search=ustadz" },
 ];
 
-export const PublicNavbar: React.FC<PublicNavbarProps> = ({ searchQuery, onSearchChange }) => {
+export const PublicNavbar: React.FC<PublicNavbarProps> = ({
+  searchQuery,
+  onSearchChange,
+}) => {
   const navigate = useNavigate();
 
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
-      return savedTheme === 'dark';
+      return savedTheme === "dark";
     }
-    return document.documentElement.classList.contains('dark');
+    return document.documentElement.classList.contains("dark");
   });
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
   }, [isDarkMode]);
 
@@ -151,14 +180,17 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({ searchQuery, onSearc
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="text-foreground/80 hover:text-foreground hover:bg-accent hover:text-accent-foreground h-8 w-8 sm:h-9 sm:w-9"
             title="Beranda Kajian"
           >
             <Home className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
 
-          <Link to="/" className="font-bold text-sm sm:text-lg text-primary tracking-tight mr-1 sm:mr-2">
+          <Link
+            to="/"
+            className="font-bold text-sm sm:text-lg text-primary tracking-tight mr-1 sm:mr-2"
+          >
             Kajian
           </Link>
 
@@ -226,7 +258,19 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({ searchQuery, onSearc
             <div className="h-4 w-px bg-border mx-1" />
             <div className="flex items-center gap-1">
               <Link
-                to="/?search=khutbah"
+                to="/belajar-islam/sirah-sejarah"
+                className="px-2.5 py-1.5 text-xs text-foreground/80 hover:text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors font-medium"
+              >
+                Sirah
+              </Link>
+              <Link
+                to="/belajar-islam/hadits-sunnah"
+                className="px-2.5 py-1.5 text-xs text-foreground/80 hover:text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors font-medium"
+              >
+                Hadits
+              </Link>
+              <Link
+                to="/khutbah"
                 className="px-2.5 py-1.5 text-xs text-foreground/80 hover:text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors font-medium"
               >
                 Khutbah
@@ -255,7 +299,7 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({ searchQuery, onSearc
               <Input
                 type="text"
                 placeholder="Cari kajian / ustadz..."
-                value={searchQuery || ''}
+                value={searchQuery || ""}
                 onChange={(e) => onSearchChange(e.target.value)}
                 className="w-36 md:w-48 h-8 pl-8 pr-3 text-xs bg-muted/50 border-border text-foreground focus:border-primary"
               />
@@ -265,7 +309,7 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({ searchQuery, onSearc
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate('/gate-admin-x9/login')}
+            onClick={() => navigate("/gate-admin-x9/login")}
             className="text-muted-foreground hover:text-foreground hover:bg-accent hidden sm:flex items-center gap-1 text-xs"
             title="Kelola Konten Admin"
           >
@@ -277,10 +321,14 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({ searchQuery, onSearc
             size="icon"
             onClick={toggleTheme}
             className="text-foreground/80 hover:text-foreground hover:bg-accent"
-            title={isDarkMode ? 'Mode Terang' : 'Mode Gelap'}
+            title={isDarkMode ? "Mode Terang" : "Mode Gelap"}
             aria-label="Toggle Theme"
           >
-            {isDarkMode ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-foreground/80" />}
+            {isDarkMode ? (
+              <Sun className="w-5 h-5 text-amber-400" />
+            ) : (
+              <Moon className="w-5 h-5 text-foreground/80" />
+            )}
           </Button>
 
           {/* Mobile Navigation Sheet (Drawer) */}
@@ -288,7 +336,10 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({ searchQuery, onSearc
             <SheetTrigger className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-lg text-foreground hover:bg-accent outline-none">
               <Menu className="w-6 h-6" />
             </SheetTrigger>
-            <SheetContent side="right" className="bg-background border-border text-foreground p-4 space-y-4">
+            <SheetContent
+              side="right"
+              className="bg-background border-border text-foreground p-4 space-y-4"
+            >
               <SheetHeader>
                 <SheetTitle className="text-primary text-left font-bold text-base">
                   Navigasi Kajian
@@ -301,7 +352,7 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({ searchQuery, onSearc
                   <Input
                     type="text"
                     placeholder="Cari materi kajian..."
-                    value={searchQuery || ''}
+                    value={searchQuery || ""}
                     onChange={(e) => onSearchChange(e.target.value)}
                     className="w-full h-9 pl-9 pr-3 text-sm bg-muted/50 border-border text-foreground"
                   />

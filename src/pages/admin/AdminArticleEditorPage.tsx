@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useArticleMutations } from '@/features/articles/hooks/useArticles';
 import { useUstadz } from '@/features/ustadz/hooks/useUstadz';
 import { useTags } from '@/features/tags/hooks/useTags';
+import { useCategories } from '@/features/categories/hooks/useCategories';
 import { articleApi } from '@/features/articles/api/article.api';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ export const AdminArticleEditorPage: React.FC = () => {
 
   const { data: ustadzList = [] } = useUstadz();
   const { data: tags = [] } = useTags();
+  const { data: categories = [] } = useCategories(true);
   const { createMutation, updateMutation } = useArticleMutations();
 
   const [title, setTitle] = useState('');
@@ -25,6 +27,7 @@ export const AdminArticleEditorPage: React.FC = () => {
   const [coverImage, setCoverImage] = useState('');
   const [status, setStatus] = useState<ArticleStatus>('DRAFT');
   const [ustadzId, setUstadzId] = useState('');
+  const [categoryId, setCategoryId] = useState('');
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   
   const [loadingArticle, setLoadingArticle] = useState(false);
@@ -62,6 +65,7 @@ export const AdminArticleEditorPage: React.FC = () => {
             setCoverImage(article.coverImage || '');
             setStatus(article.status);
             setUstadzId(article.ustadz?.id || '');
+            setCategoryId(article.category?.id || article.categoryId || '');
             setSelectedTagIds(article.tags?.map((t) => t.id) || []);
           }
         })
@@ -94,6 +98,7 @@ export const AdminArticleEditorPage: React.FC = () => {
       coverImage: coverImage || undefined,
       status,
       ustadzId: ustadzId || undefined,
+      categoryId: categoryId || undefined,
       tagIds: selectedTagIds,
     };
 
@@ -159,8 +164,29 @@ export const AdminArticleEditorPage: React.FC = () => {
                 />
               </div>
 
-              {/* Grid Ustadz & Status */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Grid Category, Ustadz & Status */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-medium">Kategori Utama</label>
+                    <Link to="/admin/taxonomy" className="text-[11px] text-primary hover:underline" target="_blank" rel="noreferrer">
+                      + Kelola Kategori
+                    </Link>
+                  </div>
+                  <select
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}
+                    className="w-full h-9 px-3 text-sm rounded-md border bg-background focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="">-- Tanpa Kategori --</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.parent ? `${c.parent.name} ↳ ${c.name}` : `📁 ${c.name}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div className="space-y-1">
                   <label className="text-xs font-medium">Pemateri / Ustadz</label>
                   <select

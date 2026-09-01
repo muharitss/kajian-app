@@ -36,7 +36,7 @@ async function runFrontendSelfCheck() {
     const { BELAJAR_ISLAM_SUBMENUS, KHUTBAH_CATEGORIES, EXTERNAL_LINKS } = await import('./shared/components/layout/PublicNavbar.js');
     assert.strictEqual(BELAJAR_ISLAM_SUBMENUS.length, 2, 'Belajar Islam should have 2 sub-menus');
     assert.strictEqual(BELAJAR_ISLAM_SUBMENUS[0].items.length, 7, 'Hukum Islam should have 7 child items');
-    assert.strictEqual(BELAJAR_ISLAM_SUBMENUS[1].items.length, 9, 'Belajar Islam should have 9 child items');
+    assert.strictEqual(BELAJAR_ISLAM_SUBMENUS[1].items.length, 11, 'Belajar Islam should have 11 child items');
     assert.strictEqual(KHUTBAH_CATEGORIES.length, 4, 'Khutbah Mega Menu should have 4 categories');
     assert.strictEqual(EXTERNAL_LINKS.length, 5, 'External links should have 5 subdomains');
     console.log('     ✓ Navbar Specifications PASSED');
@@ -49,6 +49,14 @@ async function runFrontendSelfCheck() {
     assert.strictEqual(akhlaqNav.current, 'Akhlaq');
     assert.strictEqual(akhlaqNav.title, 'AKHLAQ');
 
+    const sirahNav = getCategoryNavInfo(undefined, 'sirah-sejarah');
+    assert.strictEqual(sirahNav.parent, 'Sejarah Islam');
+    assert.strictEqual(sirahNav.current, 'Sirah & Sejarah');
+
+    const haditsNav = getCategoryNavInfo(undefined, 'hadits-sunnah');
+    assert.strictEqual(haditsNav.parent, "Al-Qur'an & Hadits");
+    assert.strictEqual(haditsNav.current, 'Hadits & Sunnah');
+
     const shalatNav = getCategoryNavInfo(undefined, 'Shalat');
     assert.strictEqual(shalatNav.parent, 'Hukum Islam');
     assert.strictEqual(shalatNav.current, 'Shalat');
@@ -59,6 +67,12 @@ async function runFrontendSelfCheck() {
     assert.strictEqual(khutbahNav.current, 'Naskah Khutbah');
     assert.strictEqual(khutbahNav.title, 'NASKAH KHUTBAH');
     console.log('     ✓ Tag Navigation Hierarchy PASSED');
+
+    // 4. Check Article Carousel Component
+    console.log('  4. Testing Article Carousel Export...');
+    const { ArticleCarousel } = await import('./features/articles/components/ArticleCarousel.js');
+    assert.strictEqual(typeof ArticleCarousel, 'function', 'ArticleCarousel should be a functional component');
+    console.log('     ✓ Article Carousel Export PASSED');
 
     console.log('\n🎉 ALL FRONTEND SELF-CHECKS PASSED SUCCESSFULLY!');
   } catch (error) {

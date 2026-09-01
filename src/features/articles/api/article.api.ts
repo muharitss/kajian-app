@@ -23,6 +23,13 @@ export const articleApi = {
     return res.data.data;
   },
 
+  getRelatedArticles: async (slug: string, limit: number = 3): Promise<Article[]> => {
+    const res = await api.get<ApiResponse<Article[]>>(`/articles/${slug}/related`, {
+      params: { limit },
+    });
+    return res.data.data;
+  },
+
   create: async (data: CreateArticlePayload): Promise<Article> => {
     const res = await api.post<ApiResponse<Article>>('/articles', data);
     return res.data.data;
