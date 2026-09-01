@@ -132,10 +132,13 @@ export const ArticleDetailPage: React.FC = () => {
 
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-[11px] sm:text-xs text-muted-foreground pt-1 sm:pt-2">
                 {article.ustadz && (
-                  <span className="flex items-center gap-1 font-medium text-foreground">
+                  <Link
+                    to={`/ustadz/${article.ustadz.slug}`}
+                    className="flex items-center gap-1 font-medium text-foreground hover:text-primary transition-colors"
+                  >
                     <User className="h-3.5 w-3.5 text-primary" />
                     Ust. {article.ustadz.name}
-                  </span>
+                  </Link>
                 )}
                 <span>{formattedDate}</span>
                 <span className="flex items-center gap-1">

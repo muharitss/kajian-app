@@ -29,4 +29,10 @@ export const ustadzApi = {
   delete: async (id: string): Promise<void> => {
     await api.delete(`/ustadz/${id}`);
   },
+
+  getBySlug: async (slug: string, params?: { page?: number; limit?: number }) => {
+    const res = await api.get(`/ustadz/${slug}`, { params });
+    return res.data;
+  },
 };
+

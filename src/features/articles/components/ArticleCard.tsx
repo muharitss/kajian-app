@@ -64,7 +64,17 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         <CardFooter className="p-3 sm:px-4 sm:py-3 border-t text-[11px] sm:text-xs text-muted-foreground flex items-center justify-between">
           <div className="flex items-center gap-1 truncate max-w-[55%]">
             <User className="h-3 w-3 sm:h-3.5 sm:w-3.5 flex-shrink-0" />
-            <span className="truncate">{article.ustadz?.name || 'Redaksi Kajian'}</span>
+            {article.ustadz ? (
+              <Link
+                to={`/ustadz/${article.ustadz.slug}`}
+                onClick={(e) => e.stopPropagation()}
+                className="hover:text-primary transition-colors truncate"
+              >
+                Ust. {article.ustadz.name}
+              </Link>
+            ) : (
+              <span className="truncate">Redaksi Kajian</span>
+            )}
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">

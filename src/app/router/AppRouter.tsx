@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { HomePage } from '@/pages/public/HomePage';
 import { ArticleDetailPage } from '@/pages/public/ArticleDetailPage';
+import { UstadzProfilePage } from '@/pages/public/UstadzProfilePage';
 import { NotFoundPage } from '@/pages/public/NotFoundPage';
 import { AdminLoginPage } from '@/pages/admin/AdminLoginPage';
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
@@ -26,6 +27,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/kategori/:tagSlug" element={<HomePage />} />
         <Route path="/topik/:tagSlug" element={<HomePage />} />
         <Route path="/article/:slug" element={<ArticleDetailPage />} />
+        <Route path="/ustadz/:slug" element={<UstadzProfilePage />} />
 
         {/* Hidden Admin Entrance Login Route */}
         <Route path="/gate-admin-x9/login" element={<AdminLoginPage />} />

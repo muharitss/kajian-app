@@ -36,3 +36,12 @@ export const useUstadzMutations = () => {
 
   return { createMutation, updateMutation, deleteMutation };
 };
+
+export const useUstadzProfile = (slug: string, page = 1) => {
+  return useQuery({
+    queryKey: ['ustadz-profile', slug, page],
+    queryFn: () => ustadzApi.getBySlug(slug, { page, limit: 10 }),
+    enabled: !!slug,
+  });
+};
+

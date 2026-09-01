@@ -98,8 +98,17 @@ async function runFrontendSelfCheck() {
     assert.strictEqual(typeof AdminDashboardPage, 'function', 'AdminDashboardPage should be a functional component');
     console.log('     ✓ AdminDashboardPage Component Export PASSED');
 
+    // 9. Check UstadzProfilePage Component and API
+    console.log('  9. Testing UstadzProfilePage and ustadzApi.getBySlug...');
+    const { UstadzProfilePage } = await import('./pages/public/UstadzProfilePage.js');
+    assert.strictEqual(typeof UstadzProfilePage, 'function', 'UstadzProfilePage should be a functional component');
+    const { ustadzApi } = await import('./features/ustadz/api/ustadz.api.js');
+    assert.strictEqual(typeof ustadzApi.getBySlug, 'function', 'ustadzApi.getBySlug should be a function');
+    console.log('     ✓ UstadzProfilePage Component & API PASSED');
+
     console.log('\n🎉 ALL FRONTEND SELF-CHECKS PASSED SUCCESSFULLY!');
   } catch (error) {
+
     console.error('\n❌ Self-Check Failed:', error);
     process.exit(1);
   }
