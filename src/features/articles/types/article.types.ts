@@ -46,6 +46,7 @@ export interface ArticleQueryParams {
   category?: string;
   tag?: string;
   ustadz?: string;
+  status?: ArticleStatus;
   page?: number;
   limit?: number;
 }

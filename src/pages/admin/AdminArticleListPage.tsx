@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdminArticles, useArticleMutations } from '@/features/articles/hooks/useArticles';
+import type { ArticleStatus } from '@/features/articles/types/article.types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,11 +11,13 @@ import { id as idLocale } from 'date-fns/locale';
 
 export const AdminArticleListPage: React.FC = () => {
   const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | ArticleStatus>('ALL');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
   const { data: articlesData, isLoading, isError } = useAdminArticles({
     search: search || undefined,
+    status: statusFilter === 'ALL' ? undefined : statusFilter,
     page,
     limit,
   });
@@ -57,7 +60,7 @@ export const AdminArticleListPage: React.FC = () => {
       </div>
 
       {/* Filter / Search Bar */}
-      <div className="flex items-center justify-between gap-4 bg-card p-3 rounded-lg border">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-card p-3 rounded-lg border">
         <div className="relative max-w-sm w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
@@ -68,7 +71,27 @@ export const AdminArticleListPage: React.FC = () => {
             className="w-full h-9 pl-9 pr-3 text-sm rounded-md border bg-background focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
-        <span className="text-xs text-muted-foreground hidden sm:inline">
+
+        <div className="flex items-center gap-1 border rounded-md p-0.5 bg-muted/30">
+          {(['ALL', 'PUBLISHED', 'DRAFT'] as const).map((s) => (
+            <button
+              key={s}
+              onClick={() => {
+                setStatusFilter(s);
+                setPage(1);
+              }}
+              className={`h-7 px-3 rounded text-xs font-medium transition-colors ${
+                statusFilter === s
+                  ? 'bg-background shadow-sm text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {s === 'ALL' ? 'Semua' : s === 'PUBLISHED' ? '✓ Terbit' : '○ Draft'}
+            </button>
+          ))}
+        </div>
+
+        <span className="text-xs text-muted-foreground hidden sm:inline ml-auto">
           Total {totalItems} artikel
         </span>
       </div>
