@@ -11,6 +11,8 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Save, AlertCircle, Upload, Loader2, X } from 'lucide-react';
 import type { ArticleStatus } from '@/features/articles/types/article.types';
 
+import { RichTextEditor } from '@/features/articles/components/RichTextEditor';
+
 export const AdminArticleEditorPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
@@ -318,13 +320,11 @@ export const AdminArticleEditorPage: React.FC = () => {
               {/* Content Body */}
               <div className="space-y-1">
                 <label className="text-xs font-medium">Isi / Content Artikel Kajian *</label>
-                <textarea
-                  rows={14}
-                  placeholder="Tuliskan isi artikel kajian secara lengkap..."
+                <RichTextEditor
                   value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="w-full p-3 text-sm rounded-md border bg-background focus:outline-none focus:ring-1 focus:ring-primary leading-relaxed font-sans"
-                  required
+                  onChange={setContent}
+                  placeholder="Tuliskan isi artikel kajian secara lengkap..."
+                  minHeight="350px"
                 />
               </div>
             </CardContent>

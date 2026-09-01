@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Clock, Eye, User, Share2, Check } from "lucide-react";
+import DOMPurify from 'dompurify';
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
 
@@ -156,9 +157,12 @@ export const ArticleDetailPage: React.FC = () => {
             )}
 
             {/* Article Main Prose Body */}
-            <div className="prose prose-slate max-w-none text-foreground leading-relaxed text-sm sm:text-base md:text-lg whitespace-pre-wrap py-2 sm:py-4">
-              {article.content}
-            </div>
+            <div
+              className="prose prose-slate max-w-none text-foreground leading-relaxed text-sm sm:text-base md:text-lg py-2 sm:py-4"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(article.content),
+              }}
+            />
 
             {/* Ustadz Bio Footer Card */}
             {article.ustadz?.bio && (

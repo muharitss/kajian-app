@@ -74,6 +74,12 @@ async function runFrontendSelfCheck() {
     assert.strictEqual(typeof ArticleCarousel, 'function', 'ArticleCarousel should be a functional component');
     console.log('     ✓ Article Carousel Export PASSED');
 
+    // 5. Check RichTextEditor Component
+    console.log('  5. Testing RichTextEditor Export...');
+    const { RichTextEditor } = await import('./features/articles/components/RichTextEditor.js');
+    assert.strictEqual(typeof RichTextEditor, 'function', 'RichTextEditor should be a functional component');
+    console.log('     ✓ RichTextEditor Export PASSED');
+
     console.log('\n🎉 ALL FRONTEND SELF-CHECKS PASSED SUCCESSFULLY!');
   } catch (error) {
     console.error('\n❌ Self-Check Failed:', error);
