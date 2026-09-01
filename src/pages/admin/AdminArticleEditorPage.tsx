@@ -13,6 +13,22 @@ import type { ArticleStatus } from '@/features/articles/types/article.types';
 
 import { RichTextEditor } from '@/features/articles/components/RichTextEditor';
 
+// Helper: Convert judul menjadi slug preview
+// Catatan: Slug final di-generate oleh backend, ini hanya preview
+export function toSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[àáâãäå]/g, 'a')
+    .replace(/[èéêë]/g, 'e')
+    .replace(/[ìíîï]/g, 'i')
+    .replace(/[òóôõö]/g, 'o')
+    .replace(/[ùúûü]/g, 'u')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
 export const AdminArticleEditorPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
@@ -164,6 +180,15 @@ export const AdminArticleEditorPage: React.FC = () => {
                   className="w-full h-9 px-3 text-sm rounded-md border bg-background focus:outline-none focus:ring-1 focus:ring-primary"
                   required
                 />
+                {title && (
+                  <p className="text-[11px] text-muted-foreground flex items-center gap-1 pt-0.5">
+                    <span className="font-medium">URL Preview:</span>
+                    <code className="bg-muted px-1.5 py-0.5 rounded text-[10px] font-mono">
+                      /article/<span className="text-primary">{toSlug(title)}</span>
+                    </code>
+                    <span className="text-[10px] italic">(slug final dibuat otomatis oleh server)</span>
+                  </p>
+                )}
               </div>
 
               {/* Grid Category, Ustadz & Status */}

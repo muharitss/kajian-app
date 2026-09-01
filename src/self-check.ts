@@ -106,6 +106,13 @@ async function runFrontendSelfCheck() {
     assert.strictEqual(typeof ustadzApi.getBySlug, 'function', 'ustadzApi.getBySlug should be a function');
     console.log('     ✓ UstadzProfilePage Component & API PASSED');
 
+    // 10. Check toSlug helper function in AdminArticleEditorPage
+    console.log('  10. Testing toSlug helper...');
+    const { toSlug } = await import('./pages/admin/AdminArticleEditorPage.js');
+    assert.strictEqual(toSlug('Pengertian Thaharah dalam Islam'), 'pengertian-thaharah-dalam-islam');
+    assert.strictEqual(toSlug('Penjelasan Pembatal Keislaman bagian 1!'), 'penjelasan-pembatal-keislaman-bagian-1');
+    console.log('     ✓ toSlug helper PASSED');
+
     console.log('\n🎉 ALL FRONTEND SELF-CHECKS PASSED SUCCESSFULLY!');
   } catch (error) {
 
