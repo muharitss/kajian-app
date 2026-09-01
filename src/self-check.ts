@@ -92,6 +92,12 @@ async function runFrontendSelfCheck() {
     assert.strictEqual(typeof AdminTaxonomyPage, 'function', 'AdminTaxonomyPage should be a functional component');
     console.log('     ✓ AdminTaxonomyPage Component Export PASSED');
 
+    // 8. Check AdminDashboardPage Component
+    console.log('  8. Testing AdminDashboardPage Export...');
+    const { AdminDashboardPage } = await import('./pages/admin/AdminDashboardPage.js');
+    assert.strictEqual(typeof AdminDashboardPage, 'function', 'AdminDashboardPage should be a functional component');
+    console.log('     ✓ AdminDashboardPage Component Export PASSED');
+
     console.log('\n🎉 ALL FRONTEND SELF-CHECKS PASSED SUCCESSFULLY!');
   } catch (error) {
     console.error('\n❌ Self-Check Failed:', error);
