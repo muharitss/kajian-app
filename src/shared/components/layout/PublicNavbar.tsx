@@ -7,7 +7,6 @@ import {
   Menu,
   ExternalLink,
   Search,
-  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,15 +21,11 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import {
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
 } from "@/components/ui/navigation-menu";
 import {
   Sheet,
@@ -40,8 +35,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-import { useTags } from "@/features/tags/hooks/useTags";
-import { useUstadz } from "@/features/ustadz/hooks/useUstadz";
+// import { useTags } from "@/features/tags/hooks/useTags";
+// import { useUstadz } from "@/features/ustadz/hooks/useUstadz";
 
 interface PublicNavbarProps {
   searchQuery?: string;
@@ -306,7 +301,7 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
             </div>
           )}
 
-          <Button
+          {/* <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate("/gate-admin-x9/login")}
@@ -314,7 +309,7 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
             title="Kelola Konten Admin"
           >
             <Lock className="h-3.5 w-3.5" />
-          </Button>
+          </Button> */}
 
           <Button
             variant="ghost"
